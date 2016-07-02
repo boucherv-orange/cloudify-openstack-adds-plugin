@@ -1,0 +1,49 @@
+##################################################################################
+# Cloudify OpenStack built in types and plugins definitions.
+##################################################################################
+
+plugins:
+  openstack_adds:
+    executor: central_deployment_agent
+    source: https://github.com/boucherv-orange/cloudify-openstack-adds-plugin/archive/master.zip
+    package_name: cloudify-openstack-adds-plugin
+    package_version: '1.4'
+
+node_types:
+  cloudify.openstack.nodes.Server:
+    derived_from: cloudify.nodes.Compute
+    properties:
+      dns_ips:
+        default: []
+      domains:
+        default: []
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        create:
+          implementation: openstack._plugin.zones.init
+
+relationships:
+  cloudify.openstack.node_connected_to_DNS:
+    derived_from: cloudify.relationships.connected_to
+    source_interfaces:
+      cloudify.interfaces.relationship_lifecycle:
+        establish:
+          implementation: openstack.designate_plugin.recordsets.add_node
+          inputs:
+            domain:
+              default: exemple.com
+            role: 
+              default: []
+            other_records:
+              default: []
+        unlink:
+          implementation: openstack.designate_plugin.recordsets.del_node
+          inputs:
+            domain:
+              default: exemple.com
+            role: 
+              default: []
+            other_records:
+              default: []
+
+

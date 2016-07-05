@@ -21,7 +21,7 @@ node_types:
       cloudify.interfaces.lifecycle:
         create:
           executor: central_deployment_agent
-          implementation: openstack.designate_plugin.zones.init
+          implementation: openstack_adds.designate_plugin.zones.init
 
 relationships:
   cloudify.openstack_adds.node_connected_to_DNS:

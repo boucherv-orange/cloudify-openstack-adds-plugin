@@ -32,7 +32,7 @@ relationships:
           inputs:
             domain:
               default: exemple.com
-            role: 
+            other_roles: 
               default: []
             other_records:
               default: []
@@ -41,7 +41,7 @@ relationships:
           inputs:
             domain:
               default: exemple.com
-            role: 
+            other_roles: 
               default: []
             other_records:
               default: []

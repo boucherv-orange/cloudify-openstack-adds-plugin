@@ -51,7 +51,7 @@ def delete_record(designate_client, zone_name, recordset_name, type_, new_record
         }
         return designate_client.recordsets.update(zone_name, recordset_name, data)
 @operation
-def add_node(domain, other_roles, other_records):
+def add_node(domain, other_roles, other_records, **kwargs):
     zone_name = domain + "."
     instance_name = ctx.source.instance.id
     role = re.split(r'_',instance_name)[0]
@@ -79,7 +79,7 @@ def add_node(domain, other_roles, other_records):
             ctx.logger.debug(create_record(designate_client, zone_name, recordset_name, type_, record_value))        
 
 @operation
-def del_node(domain, other_roles, other_records):
+def del_node(domain, other_roles, other_records, **kwargs):
     zone_name = domain + "."
     instance_name = ctx.source.instance.id
     role = re.split(r'_',instance_name)[0]

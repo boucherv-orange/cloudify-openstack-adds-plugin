@@ -10,7 +10,7 @@ plugins:
     package_version: '1.4'
 
 node_types:
-  cloudify.openstack.nodes.Server:
+  cloudify.openstack_adds.nodes.DNS_client:
     derived_from: cloudify.nodes.Compute
     properties:
       dns_ips:
@@ -20,15 +20,17 @@ node_types:
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: openstack._plugin.zones.init
+          executor: central_deployment_agent
+          implementation: openstack.designate_plugin.zones.init
 
 relationships:
-  cloudify.openstack.node_connected_to_DNS:
+  cloudify.openstack_adds.node_connected_to_DNS:
     derived_from: cloudify.relationships.connected_to
     source_interfaces:
       cloudify.interfaces.relationship_lifecycle:
         establish:
-          implementation: openstack.designate_plugin.recordsets.add_node
+          implementation: openstack_adds.designate_plugin.recordsets.add_node
+          executor: central_deployment_agent
           inputs:
             domain:
               default: exemple.com
@@ -37,7 +39,8 @@ relationships:
             other_records:
               default: []
         unlink:
-          implementation: openstack.designate_plugin.recordsets.del_node
+          implementation: openstack_adds.designate_plugin.recordsets.del_node
+          executor: central_deployment_agent
           inputs:
             domain:
               default: exemple.com

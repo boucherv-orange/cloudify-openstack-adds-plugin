@@ -17,6 +17,14 @@ node_types:
         default: []
       domains:
         default: []
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        create:
+          implementation: openstack_adds.designate_plugin.zones.add_zones
+        delete:
+          implementation: openstack_adds.designate_plugin.zones.del_zones
+
+default: {}
 
 relationships:
   cloudify.openstack_adds.node_connected_to_DNS:

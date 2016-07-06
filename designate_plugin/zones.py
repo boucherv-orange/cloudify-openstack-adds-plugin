@@ -38,7 +38,6 @@ def delete_zone(designate_client, zone_name):
 def add_zones(**kwargs):
     dns_ips = ctx.node.properties['dns_ips']
     designate_client = get_client(dns_ips[0])
-
     domains = ctx.node.properties['domains']
     for domain in domains:
         zone_name = domain + "."
@@ -48,7 +47,6 @@ def add_zones(**kwargs):
 def del_zones(**kwargs):
     dns_ips = ctx.node.properties['dns_ips']
     designate_client = get_client(dns_ips[0])
-
     domains = ctx.node.properties['domains']
     for domain in domains:
         zone_name = domain + "."

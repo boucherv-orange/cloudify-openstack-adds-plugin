@@ -51,27 +51,28 @@ def delete_record(designate_client, zone_name, recordset_name, type_, new_record
         }
         return designate_client.recordsets.update(zone_name, recordset_name, data)
 @operation
-def add_node(domain, other_roles, other_records, **kwargs):
+def add_node(domain, record_ip, other_roles, other_records, **kwargs):
     zone_name = domain + "."
     instance_name = ctx.source.instance.id
     role = re.split(r'_',instance_name)[0]
-    private_ip = ctx.source.instance.host_ip
+    if record_ip == "":
+        record_ip = ctx.source.instance.host_ip
 
     dns_ips = ctx.target.node.properties['dns_ips']
     designate_client = get_client(dns_ips[0])
 
     recordset_name = instance_name + "." + zone_name
-    ctx.logger.debug(create_record(designate_client, zone_name, recordset_name, "A", private_ip))
+    ctx.logger.debug(create_record(designate_client, zone_name, recordset_name, "A", record_ip))
 
     if role != "bono":
         recordset_name = role + "." + zone_name
     else:
         recordset_name = zone_name
-    ctx.logger.debug(create_record(designate_client, zone_name, recordset_name, "A", private_ip))
+    ctx.logger.debug(create_record(designate_client, zone_name, recordset_name, "A", record_ip))
 
     for other_role in other_roles:
         recordset_name = other_role + "." + role + "." + zone_name
-        ctx.logger.debug(create_record(designate_client, zone_name, recordset_name, "A", private_ip))
+        ctx.logger.debug(create_record(designate_client, zone_name, recordset_name, "A", record_ip))
 
     for type_, records in other_records:
         for record_name, record_value in records:
@@ -79,27 +80,28 @@ def add_node(domain, other_roles, other_records, **kwargs):
             ctx.logger.debug(delete_record(designate_client, zone_name, recordset_name, type_, record_value))        
 
 @operation
-def del_node(domain, other_roles, other_records, **kwargs):
+def del_node(domain, record_ip, other_roles, other_records, **kwargs):
     zone_name = domain + "."
     instance_name = ctx.source.instance.id
     role = re.split(r'_',instance_name)[0]
-    private_ip = ctx.source.instance.host_ip
+    if record_ip == "":
+        record_ip = ctx.source.instance.host_ip
 
     dns_ips = ctx.target.node.properties['dns_ips']
     designate_client = get_client(dns_ips[0])
 
     recordset_name = instance_name + "." + zone_name
-    ctx.logger.debug(delete_record(designate_client, zone_name, recordset_name, "A", private_ip))
+    ctx.logger.debug(delete_record(designate_client, zone_name, recordset_name, "A", record_ip))
 
     if role != "bono":
         recordset_name = role + "." + zone_name
     else:
         recordset_name = zone_name
-    ctx.logger.debug(delete_record(designate_client, zone_name, recordset_name, "A", private_ip))
+    ctx.logger.debug(delete_record(designate_client, zone_name, recordset_name, "A", record_ip))
 
     for other_role in other_roles:
         recordset_name = other_role + "." + role + "." + zone_name
-        ctx.logger.debug(delete_record(designate_client, zone_name, recordset_name, "A", private_ip))
+        ctx.logger.debug(delete_record(designate_client, zone_name, recordset_name, "A", record_ip))
 
     for type_, records in other_records:
         for record_name, record_value in records:

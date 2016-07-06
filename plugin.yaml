@@ -35,6 +35,8 @@ relationships:
           inputs:
             domain:
               default: exemple.com
+            record_ip:
+              default: ""
             other_roles: 
               default: []
             other_records:
@@ -45,6 +47,8 @@ relationships:
           inputs:
             domain:
               default: exemple.com
+            record_ip:
+              default: ""
             other_roles: 
               default: []
             other_records:

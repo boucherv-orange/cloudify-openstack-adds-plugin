@@ -24,8 +24,6 @@ node_types:
         delete:
           implementation: openstack_adds.designate_plugin.zones.del_zones
 
-default: {}
-
 relationships:
   cloudify.openstack_adds.node_connected_to_DNS:
     derived_from: cloudify.relationships.connected_to

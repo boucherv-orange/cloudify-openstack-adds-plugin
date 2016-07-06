@@ -5,7 +5,7 @@ Created on Fri Jul  1 15:11:36 2016
 @author: boucherv
 """
 
-
+import re
 from cloudify import ctx
 from cloudify.decorators import operation
 import designateclient.v2.client as dgclient

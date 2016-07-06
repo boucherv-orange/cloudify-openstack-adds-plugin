@@ -15,6 +15,7 @@ setup(
     install_requires=[
         'cloudify-plugins-common>=3.3.1',
         'python-designateclient==1.5.0',
+        'keystoneauth1==1.2.0',
         'IPy==0.81'
     ]
 )

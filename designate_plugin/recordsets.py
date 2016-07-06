@@ -60,7 +60,7 @@ def add_node(domain, other_roles, other_records, **kwargs):
     dns_ips = ctx.target.node.properties['dns_ips']
     designate_client = get_client(dns_ips[0])
 
-    recordset_name = instance_name + zone_name
+    recordset_name = instance_name + "." + zone_name
     ctx.logger.debug(create_record(designate_client, zone_name, recordset_name, "A", private_ip))
 
     if role != "bono":

@@ -49,5 +49,3 @@ relationships:
               default: []
             other_records:
               default: []
-
-

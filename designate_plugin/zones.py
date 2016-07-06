@@ -29,27 +29,27 @@ def create_zone(designate_client, zone_name, email=None, ttl=None):
         return designate_client.zones.create(zone_name, email=email[:-1], ttl=ttl)
 
 def delete_zone(designate_client, zone_name):
-   recordsets = designate_client.recordsets.list(zone_name)
- 
-   if len(recordsets) < 3:
-       return designate_client.zones.delete(zone_name)
+    recordsets = designate_client.recordsets.list(zone_name)
+
+    if len(recordsets) < 3:
+        return designate_client.zones.delete(zone_name)
 
 @operation
 def add_zones(**kwargs):
     dns_ips = ctx.node.properties['dns_ips']
     designate_client = get_client(dns_ips[0])
 
-   	domains = ctx.node.properties['domains']
-   	for domain in domains:
-   		zone_name = domain + "."
-   		ctx.logger.debug(create_zone(designate_client, zone_name))
+    domains = ctx.node.properties['domains']
+    for domain in domains:
+        zone_name = domain + "."
+        ctx.logger.debug(create_zone(designate_client, zone_name))
 
 @operation
 def del_zones(**kwargs):
     dns_ips = ctx.node.properties['dns_ips']
     designate_client = get_client(dns_ips[0])
 
-   	domains = ctx.node.properties['domains']
-   	for domain in domains:
-   		zone_name = domain + "."
-   		ctx.logger.debug(delete_zone(designate_client, zone_name))
+    domains = ctx.node.properties['domains']
+    for domain in domains:
+        zone_name = domain + "."
+        ctx.logger.debug(delete_zone(designate_client, zone_name))

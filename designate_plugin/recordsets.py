@@ -57,7 +57,7 @@ def add_node(domain, other_roles, other_records, **kwargs):
     role = re.split(r'_',instance_name)[0]
     private_ip = ctx.source.instance.host_ip
 
-    dns_ips = ctx.target.node.properties.dns_ips
+    dns_ips = ctx.target.node.properties['dns_ips']
     designate_client = get_client(dns_ips[0])
 
     recordset_name = instance_name + zone_name

@@ -23,6 +23,7 @@ def create_record(designate_client, zone_name, recordset_name, type_, new_record
         if recordset['name'] == recordset_name and recordset['type'] == type_:
             recordset_exist = True
             records = recordset.get('records')
+            recordset_id = recordset.get('id')
 
     if not recordset_exist:
         return designate_client.recordsets.create(zone_name, recordset_name, type_, [new_record])
@@ -33,7 +34,7 @@ def create_record(designate_client, zone_name, recordset_name, type_, new_record
                 'type': type_,
                 'records': records
         }
-        return designate_client.recordsets.update(zone_name, recordset_name, data)
+        return designate_client.recordsets.update(zone_name, recordset_id, data)
 
 def delete_record(designate_client, zone_name, recordset_name, type_, new_record):
     recordset = designate_client.recordsets.get(zone_name, recordset_name)
@@ -75,8 +76,8 @@ def add_node(domain, other_roles, other_records, record_ip="", **kwargs):
         recordset_name = other_role + "." + role + "." + zone_name
         ctx.logger.debug(create_record(designate_client, zone_name, recordset_name, "A", record_ip))
 
-    for type_, records in other_records:
-        for record_name, record_value in records:
+    for type_, records in other_records.iteritems():
+        for record_name, record_value in records.iteritems():
             recordset_name = record_name + "." + zone_name
             record_value = record_value + " " + instance_name
             ctx.logger.debug(delete_record(designate_client, zone_name, recordset_name, type_, record_value))        

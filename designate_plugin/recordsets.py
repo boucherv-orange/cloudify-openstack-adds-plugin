@@ -65,7 +65,7 @@ def add_node(domain, other_roles, other_records, record_ip="", **kwargs):
 
     if role == "bono":
         recordset_name = zone_name
-    else if role == "homestead":
+    elif role == "homestead":
         recordset_name = "hs." + zone_name
     else:
         recordset_name = role + "." + zone_name 

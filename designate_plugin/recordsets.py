@@ -80,7 +80,7 @@ def add_node(domain, other_roles, other_records, record_ip="", **kwargs):
         for record_name, record_value in records.iteritems():
             recordset_name = record_name + "." + zone_name
             record_value = record_value + " " + instance_name
-            ctx.logger.debug(delete_record(designate_client, zone_name, recordset_name, type_, record_value))        
+            ctx.logger.debug(create_record(designate_client, zone_name, recordset_name, type_, record_value))        
 
 @operation
 def del_node(domain, other_roles, other_records, record_ip="", **kwargs):
@@ -96,17 +96,20 @@ def del_node(domain, other_roles, other_records, record_ip="", **kwargs):
     recordset_name = instance_name + "." + zone_name
     ctx.logger.debug(delete_record(designate_client, zone_name, recordset_name, "A", record_ip))
 
-    if role != "bono":
-        recordset_name = role + "." + zone_name
-    else:
+    if role == "bono":
         recordset_name = zone_name
+    elif role == "homestead":
+        recordset_name = "hs." + zone_name
+    else:
+        recordset_name = role + "." + zone_name 
     ctx.logger.debug(delete_record(designate_client, zone_name, recordset_name, "A", record_ip))
 
     for other_role in other_roles:
         recordset_name = other_role + "." + role + "." + zone_name
         ctx.logger.debug(delete_record(designate_client, zone_name, recordset_name, "A", record_ip))
 
-    for type_, records in other_records:
-        for record_name, record_value in records:
-            recordset_name = record_name + "." +  zone_name
-            ctx.logger.debug(delete_record(designate_client, zone_name, recordset_name, type_, record_value))
+    for type_, records in other_records.iteritems():
+        for record_name, record_value in records.iteritems():
+            recordset_name = record_name + "." + zone_name
+            record_value = record_value + " " + instance_name
+            ctx.logger.debug(delete_record(designate_client, zone_name, recordset_name, type_, record_value))    

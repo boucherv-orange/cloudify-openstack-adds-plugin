@@ -79,7 +79,7 @@ def add_node(domain, other_roles, other_records, record_ip="", **kwargs):
     for type_ in other_records:
         for record_name in other_records[type_]:
             recordset_name = record_name + "." + zone_name
-            record_value = other_records[type_][record_name] + " " + instance_name
+            record_value = other_records[type_][record_name] + " " + instance_name + "." + zone_name
             ctx.logger.debug(create_record(designate_client, zone_name, recordset_name, type_, record_value))        
 
 @operation
@@ -111,5 +111,5 @@ def del_node(domain, other_roles, other_records, record_ip="", **kwargs):
     for type_ in other_records:
         for record_name in other_records[type_]:
             recordset_name = record_name + "." + zone_name
-            record_value = other_records[type_][record_name] + " " + instance_name
+            record_value = other_records[type_][record_name] + " " + instance_name + "." + zone_name
             ctx.logger.debug(delete_record(designate_client, zone_name, recordset_name, type_, record_value))     

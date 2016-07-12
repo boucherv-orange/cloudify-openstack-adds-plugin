@@ -37,10 +37,14 @@ def create_record(designate_client, zone_name, recordset_name, type_, new_record
         return designate_client.recordsets.update(zone_name, recordset_id, data)
 
 def delete_record(designate_client, zone_name, recordset_name, type_, new_record):
-    recordset = designate_client.recordsets.get(zone_name, recordset_name)
-    records = recordset.get('records')
+    recordsets = designate_client.recordsets.list(zone_name)
+    records = []
+    for recordset in recordsets:
+        if recordset['name'] == recordset_name and recordset['type'] == type_:
+            records = recordset.get('records')
+            recordset_id = recordset.get('id')
     if len(records)<2:
-        return designate_client.recordsets.delete(zone_name, recordset_name)
+        return designate_client.recordsets.delete(zone_name, recordset_id)
     else:
         records.remove(new_record)
         data = {
@@ -48,7 +52,7 @@ def delete_record(designate_client, zone_name, recordset_name, type_, new_record
                 'type': type_,
                 'records': records
         }
-        return designate_client.recordsets.update(zone_name, recordset_name, data)
+        return designate_client.recordsets.update(zone_name, recordset_id, data)
 
 @operation
 def add_node(domain, other_roles, other_records, record_ip="", **kwargs):

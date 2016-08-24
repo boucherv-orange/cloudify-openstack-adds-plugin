@@ -24,6 +24,41 @@ node_types:
         delete:
           implementation: openstack_adds.designate_plugin.zones.del_zones
 
+  cloudify.openstack_adds.nodes.Subnet:
+    derived_from: cloudify.nodes.Subnet
+    properties:
+      subnet:
+        default: {}
+      use_external_resource:
+        type: boolean
+        default: false
+      resource_id:
+        default: ''
+      openstack_config:
+        default: {}
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        create:
+          implementation: openstack_adds.neutron_plugin.subnet.create
+          inputs:
+            args:
+              default: {}
+            openstack_config:
+              default: {}
+        delete:
+          implementation: openstack_adds.neutron_plugin.subnet.delete
+          inputs:
+            openstack_config:
+              default: {}
+      cloudify.interfaces.validation:
+        creation:
+          implementation: openstack_adds.neutron_plugin.subnet.creation_validation
+          inputs:
+            args:
+              default: {}
+            openstack_config:
+              default: {}
+
 relationships:
   cloudify.openstack_adds.node_connected_to_DNS:
     derived_from: cloudify.relationships.connected_to

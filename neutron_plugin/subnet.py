@@ -58,6 +58,8 @@ def create(neutron_client, args, **kwargs):
                     raise NonRecoverableError(
                         'Expected external resources subnet {0} and network'
                         ' {1} to be connected'.format(subnet_id, net_id))
+                neutron_client.update_subnet(
+                        subnet_id, **args)
             return
         except Exception:
             delete_runtime_properties(ctx, RUNTIME_PROPERTIES_KEYS)

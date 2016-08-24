@@ -62,6 +62,9 @@ def create(neutron_client, args, **kwargs):
                     ctx.instance.runtime_properties[OPENSTACK_ID_PROPERTY]
             subnet = {}
             subnet.update(ctx.node.properties['subnet'], **args)
+            for host_route in subnet['host_routes']:
+                if not 'nexthop' in host_route.keys():
+                    host_route['nexthop'] = get_relationships_host_ip()
             neutron_client.update_subnet(
                         subnet_id, {'subnet': subnet})
             return
@@ -104,3 +107,9 @@ def creation_validation(neutron_client, args, **kwargs):
         ctx.logger.error('VALIDATION ERROR: ' + err)
         raise NonRecoverableError(err)
     validate_ip_or_range_syntax(ctx, subnet['cidr'])
+
+def get_relationships_host_ip():
+    relationships = ctx.instance.relationships
+    for element in relationships:
+        if element.type == 'cloudify.relationships.depends_on':
+            return element.target.instance.host_ip

@@ -60,8 +60,10 @@ def create(neutron_client, args, **kwargs):
                         ' {1} to be connected'.format(subnet_id, net_id))
             subnet_id = \
                     ctx.instance.runtime_properties[OPENSTACK_ID_PROPERTY]
+            subnet = {}
+            subnet.update(ctx.node.properties['subnet'], **args)
             neutron_client.update_subnet(
-                        subnet_id, **args)
+                        subnet_id, {'subnet': subnet})
             return
         except Exception:
             delete_runtime_properties(ctx, RUNTIME_PROPERTIES_KEYS)
